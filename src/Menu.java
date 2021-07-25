@@ -44,7 +44,7 @@ public class Menu {
                   throw new Exception();
           }
       } catch (Exception e) {
-          System.out.println("Please provide the natural number from 1 to 5");
+          System.out.println("Please provide the natural number from 1 to 6");
           takeInput();
       } 
       finally {
