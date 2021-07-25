@@ -103,8 +103,11 @@ public int getDaysTaught() {
 @Override
 public String toString() {
 	return "Student [name=" + name + ", cls=" + cls + ", averageMarks=" + averageMarks + ", totalMarks=" + totalMarks
-			+ ", earning=" + earning + "]";
+			+ ", earning=" + earning + ", daysTaught=" + daysTaught + "]";
 }
+
+
+
 
 
  

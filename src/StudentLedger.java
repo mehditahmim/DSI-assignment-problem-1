@@ -1,16 +1,17 @@
 import java.util.ArrayList;
 import java.util.HashMap;
-public class StudentManagement {
+
+
+public class StudentLedger {
 
     private int totalEarnings, totalDaysTaught;
     private HashMap<Integer, Integer> daysTaughtInEachClass;
     private HashMap<Integer, Integer> earningInEachClass;
     private HashMap<String, Integer> earningOfEachSubject;
-    //private HashMap<Integer, Student> studentsInEachClass;
     private ArrayList<Student> listOfStudents;
 
     
-    public StudentManagement() {
+    public StudentLedger() {
     	
     	this.totalEarnings = 0;
     	this.totalDaysTaught = 0;
@@ -18,6 +19,15 @@ public class StudentManagement {
     	this.earningInEachClass = new HashMap<>();
     	this.earningOfEachSubject = new HashMap<>();  	
     	this.listOfStudents = new ArrayList<>();
+    	daysTaughtInEachClass.put(8,0);
+    	daysTaughtInEachClass.put(9,0);
+    	daysTaughtInEachClass.put(10,0);
+		earningInEachClass.put(8, 0);
+		earningInEachClass.put(9, 0);
+		earningInEachClass.put(10, 0);
+		earningOfEachSubject.put("Maths",0);
+		earningOfEachSubject.put("English",0);
+		earningOfEachSubject.put("Bangla",0);
     }
     
     public Student searchStudent(int id) {
@@ -31,33 +41,24 @@ public class StudentManagement {
     	return null;
     }
     
-    public Student  addNewStudent(String name, int cls, boolean[] subjects) {
+    public void  addNewStudent(String name, int cls, boolean[] subjects) {
     	
     	Student s = new Student(name, cls, subjects);
     	listOfStudents.add(s);
-    	System.out.println("The student named" + s.getName() +" and id"+ s.getId()+ " is added");
-    	return s;
+    	System.out.println("The student named: " + s.getName() +" and id:"+ s.getId()+ " is added");
+    	
     }
     
     public boolean increaseDays(int id, int days) {
     	
     	Student s = searchStudent(id);
     	if(s == null) return false;
+    	System.out.println("students information before updating days:");
+    	System.out.println(s +"\n");
     	int cls = s.getCls();
     	totalDaysTaught += days;
     	s.addDaysTaught(days);
     	totalEarnings += s.getEarning();
-    	boolean isExecute = false;
-
-    	if (isExecute == false)
-    	{
-    		daysTaughtInEachClass.put(cls,0);
-    		earningInEachClass.put(cls, 0);
-    		earningOfEachSubject.put("Maths",0);
-    		earningOfEachSubject.put("English",0);
-    		earningOfEachSubject.put("Bangla",0);
-    		isExecute = true;
-    	}
     	
     	boolean[] listOfSubjects = s.getListOfSubjects();
     	int newDays = daysTaughtInEachClass.get(cls) + days;
@@ -87,6 +88,8 @@ public class StudentManagement {
         	int newEarnings = earningOfEachSubject.get("Bangla") + days;
         	earningOfEachSubject.put("Bangla", newEarnings);
         }
+        System.out.println("students information after updating days");
+        System.out.println(s+"\n");
         return true;
     }
     
@@ -94,24 +97,54 @@ public class StudentManagement {
     	
     	Student s = searchStudent(id);
     	if (s == null) return false;
+    	System.out.println("students information before updating days:");
+    	System.out.println(s +"\n");
     	s.addMarks(marks);
+    	System.out.println("students information after updating days");
+        System.out.println(s+"\n");
     	return true;
     }
     
     public boolean deleteStudent(int id) {
     	
     	Student s = searchStudent(id);
-    	
+    	System.out.println(s);
     	if (s == null) return false;
     	
     	totalDaysTaught -= s.getDaysTaught();
     	int cls = s.getCls();
-    	int newDays = daysTaughtInEachClass.get(cls) - s.getDaysTaught(); 
-    	daysTaughtInEachClass.put(cls, newDays);
+    	if(daysTaughtInEachClass.containsKey(cls))
+    	{
+    		int newDays = daysTaughtInEachClass.get(cls) - s.getDaysTaught(); 
+        	System.out.println(newDays);
+        	daysTaughtInEachClass.put(cls, newDays);
+        	
+    	}
+    	
     	listOfStudents.remove(s);
+    
     	return true;
     			
     	
+    }
+    
+    public ArrayList<Student> getStudentsOfOneClass(int cls){
+    	ArrayList<Student> studentOfOneClass = new ArrayList<>();
+    	for(Student s:listOfStudents) {
+    		if (s.getCls() == cls) {
+    			studentOfOneClass.add(s);
+    		}
+    	}
+    	return studentOfOneClass;
+    }
+    
+    public float getAverageMarksOfAllStudents() {
+    	
+    	float totalMark = 0;
+    	for(Student s:listOfStudents) {
+    		totalMark = totalMark + s.getTotalMarks();
+    	}
+    	return (float)totalMark/ listOfStudents.size();
     }
 
 	public int getTotalEarnings() {
